@@ -3,31 +3,58 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+}
+
+* {
+    box-sizing: border-box;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
+    .text-logo {
+        background-image: radial-gradient(
+            circle,
+            #274e7d,
+            #2b5d92,
+            #2e6ca8,
+            #2f7cbe,
+            #2e8dd4,
+            #3f9bdf,
+            #4fa8e9,
+            #5fb6f4,
+            #7dc4f6,
+            #99d1f8,
+            #b4defa,
+            #cfebfc
+        );
+        background-clip: text;
+        color: transparent;
+        background-color: white;
+    }
+}
+
+@layer components {
+    .wrapper {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
