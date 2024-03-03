@@ -1,4 +1,4 @@
-import NextAuth, { NextAuthOptions, Session } from 'next-auth';
+import { NextAuthOptions, Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
@@ -7,30 +7,19 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: { label: 'Username', type: 'text', placeholder: 'johnsmith' },
+                email: { label: 'Email', type: 'text', placeholder: 'johnsmith' },
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials, req) {
                 if (credentials) {
-                    const res = await fetch('https://dummyjson.com/auth/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            username: credentials.username,
-                            password: credentials.password,
-                            expiresInMins: 60, // optional
-                        }),
-                    }).then((res) => res.json());
-
-                    if (res?.message) {
-                        throw new Error('Login Failed');
-                    }
-
-                    if (res) {
-                        return res;
-                    } else {
-                        return null;
-                    }
+                    const res = {
+                        _id: 1284362,
+                        email: 'alice01422@gmail.com',
+                        role: 'USER',
+                        avatar: 'https://source.unsplash.com/random/100×100',
+                        name: 'Crodic Crystal',
+                    };
+                    return res as any;
                 } else {
                     return null;
                 }
@@ -76,5 +65,8 @@ export const authOptions: NextAuthOptions = {
             }
             return token;
         },
+    },
+    pages: {
+        signIn: '/login',
     },
 };
