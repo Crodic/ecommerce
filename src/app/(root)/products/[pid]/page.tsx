@@ -57,7 +57,7 @@ const ProductDetailPage = () => {
                         <TabsPreview />
                         <Divider className="my-4" />
                         <h3 className="text-xl font-bold mb-3">Sản Phẩm Tương Tự</h3>
-                        <div className="w-[920px] h-[320px] overflow-x-scroll flex justify-center gap-5">
+                        <div className="w-[920px] h-[320px] overflow-x-scroll flex justify-start gap-5">
                             {new Array(20).fill(null).map((product, index) => {
                                 return <ProductItem key={index} width="200px" />;
                             })}
