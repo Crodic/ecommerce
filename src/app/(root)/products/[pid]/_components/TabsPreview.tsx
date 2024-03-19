@@ -2,7 +2,7 @@
 import React from 'react';
 import { Tabs, Tab, Card, CardBody, CardHeader } from '@nextui-org/react';
 
-export default function TabsPreview() {
+export default function TabsPreview({ preview }: { preview: string }) {
     const [selected, setSelected] = React.useState('photos');
 
     return (
@@ -10,11 +10,7 @@ export default function TabsPreview() {
             <Tabs aria-label="Options" selectedKey={selected} onSelectionChange={setSelected as any}>
                 <Tab key="description" title="Mô Tả">
                     <Card>
-                        <CardBody>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat.
-                        </CardBody>
+                        <CardBody>{preview}</CardBody>
                     </Card>
                 </Tab>
                 <Tab key="preview" title="Đánh Giá">

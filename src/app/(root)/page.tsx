@@ -1,12 +1,31 @@
+'use client';
 import MainLogo from '@/assets/icons/MainLogo';
 import Banner from '@/components/Banner';
 import { BANNER } from '@/utils/var';
-import { Button } from '@nextui-org/react';
+import { Button, Skeleton } from '@nextui-org/react';
 import ProductItem from './_components/ProductItem';
 import { cn } from '@/libs/utils';
 import PostItem from './_components/PostItem';
+import useFetchProduct from '@/hooks/libs/useFetchProduct';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+    const { data, isFetching } = useFetchProduct();
+    const { push } = useRouter();
+
+    const button = (
+        <div
+            className={cn(
+                'mx-auto mt-6 w-[max-content] transition-all duration-250',
+                'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
+            )}
+        >
+            <Button color="primary" variant="shadow" className="uppercase font-bold" onClick={() => push(`/products`)}>
+                Xem Thêm
+            </Button>
+        </div>
+    );
+
     return (
         <main>
             <Banner banners={BANNER} />
@@ -19,20 +38,16 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-5 gap-1">
-                    {new Array(10).fill(null).map((_, index) => {
-                        return <ProductItem key={index} />;
-                    })}
+                    {isFetching &&
+                        new Array(10).fill(null).map((_, index) => {
+                            return <Skeleton className="h-[300px]" key={index} />;
+                        })}
+                    {data &&
+                        data.data.data.products.map((product: any, index: number) => {
+                            return <ProductItem key={index} product={product} />;
+                        })}
                 </div>
-                <div
-                    className={cn(
-                        'mx-auto mt-6 w-[max-content] transition-all duration-250',
-                        'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
-                    )}
-                >
-                    <Button color="primary" variant="shadow" className="uppercase font-bold">
-                        Xem Thêm
-                    </Button>
-                </div>
+                {button}
             </section>
 
             <section className="my-[100px] wrapper">
@@ -43,20 +58,16 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-5 gap-1">
-                    {new Array(10).fill(null).map((_, index) => {
-                        return <ProductItem key={index} />;
-                    })}
+                    {isFetching &&
+                        new Array(10).fill(null).map((_, index) => {
+                            return <Skeleton className="h-[300px]" key={index} />;
+                        })}
+                    {data &&
+                        data.data.data.products.map((product: any, index: number) => {
+                            return <ProductItem key={index} product={product} />;
+                        })}
                 </div>
-                <div
-                    className={cn(
-                        'mx-auto mt-6 w-[max-content] transition-all duration-250',
-                        'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
-                    )}
-                >
-                    <Button color="primary" variant="shadow" className="uppercase font-bold">
-                        Xem Thêm
-                    </Button>
-                </div>
+                {button}
             </section>
 
             <section className="my-[100px] wrapper">
@@ -67,20 +78,16 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-5 gap-1">
-                    {new Array(10).fill(null).map((_, index) => {
-                        return <ProductItem key={index} />;
-                    })}
+                    {isFetching &&
+                        new Array(10).fill(null).map((_, index) => {
+                            return <Skeleton className="h-[300px]" key={index} />;
+                        })}
+                    {data &&
+                        data.data.data.products.map((product: any, index: number) => {
+                            return <ProductItem key={index} product={product} />;
+                        })}
                 </div>
-                <div
-                    className={cn(
-                        'mx-auto mt-6 w-[max-content] transition-all duration-250',
-                        'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
-                    )}
-                >
-                    <Button color="primary" variant="shadow" className="uppercase font-bold">
-                        Xem Thêm
-                    </Button>
-                </div>
+                {button}
             </section>
 
             <section className="my-[100px] wrapper">
@@ -91,20 +98,16 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-5 gap-1">
-                    {new Array(10).fill(null).map((_, index) => {
-                        return <ProductItem key={index} />;
-                    })}
+                    {isFetching &&
+                        new Array(10).fill(null).map((_, index) => {
+                            return <Skeleton className="h-[300px]" key={index} />;
+                        })}
+                    {data &&
+                        data.data.data.products.map((product: any, index: number) => {
+                            return <ProductItem key={index} product={product} />;
+                        })}
                 </div>
-                <div
-                    className={cn(
-                        'mx-auto mt-6 w-[max-content] transition-all duration-250',
-                        'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
-                    )}
-                >
-                    <Button color="primary" variant="shadow" className="uppercase font-bold">
-                        Xem Thêm
-                    </Button>
-                </div>
+                {button}
             </section>
 
             <section className="my-[100px] wrapper">
@@ -120,16 +123,7 @@ export default function Home() {
                     })}
                 </div>
 
-                <div
-                    className={cn(
-                        'mx-auto mt-6 w-[max-content] transition-all duration-250',
-                        'hover:-translate-y-2 hover:scale-[1.1] hover:shadow-xl'
-                    )}
-                >
-                    <Button color="primary" variant="shadow" className="uppercase font-bold">
-                        Xem Thêm
-                    </Button>
-                </div>
+                {button}
             </section>
         </main>
     );

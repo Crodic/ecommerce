@@ -7,35 +7,35 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { HiShoppingBag } from 'react-icons/hi';
 
-const ProductItem = ({ width }: { width?: string }) => {
+const ProductItem = ({ width, product }: { width?: string; product: any }) => {
     const { push } = useRouter();
     return (
         <div
             className={cn('h-[300px] border cursor-pointer group relative group bg-white flex-shrink-0')}
             style={{ width: width || 'auto' }}
-            onClick={() => push('/products/1')}
+            onClick={() => push(`/products/${product?._id}`)}
         >
             <div className="relative w-full h-[50%] overflow-hidden">
                 <Link href="/">
                     <Image
-                        src="https://source.unsplash.com/random/250x150"
+                        src={product?.capture}
                         alt=""
                         fill
                         className="object-cover group-hover:scale-[1.2] transition-all duration-200"
                     />
                 </Link>
             </div>
-            <p className="uppercase text-xs opacity-45 text-center my-4">Cây cảnh</p>
+            <p className="uppercase text-xs opacity-45 text-center my-4">{product?.category.name}</p>
             <Link
-                href="/"
+                href={`/product/${product?._id}`}
                 className={cn(
-                    'uppercase text-center font-semibold mb-4 transition-colors duration-250 block',
+                    'uppercase line-clamp-1 text-center font-semibold mb-4 transition-colors duration-250',
                     'hover:text-primary'
                 )}
             >
-                Hoa Sứ Kiểng
+                {product?.title}
             </Link>
-            <p className="font-bold text-center my-5">250.000 đ</p>
+            <p className="font-bold text-center my-5">{product?.price} đ</p>
             <div
                 className="absolute top-[50%] left-[10%] translate-y-[-50%]
             w-[80px] h-[80px] hidden group-hover:block"

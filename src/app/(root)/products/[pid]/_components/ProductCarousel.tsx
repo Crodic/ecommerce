@@ -13,7 +13,7 @@ import '@/assets/styles/product_carousel.css';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import Image from 'next/image';
 
-const ProductCarousel = () => {
+const ProductCarousel = ({ data }: { data: { capture: string; images: string[] } }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     return (
@@ -32,21 +32,17 @@ const ProductCarousel = () => {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper2"
             >
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
+                {data.images &&
+                    data.images.length > 0 &&
+                    data.images.map((picture, index) => {
+                        return (
+                            <SwiperSlide key={index}>
+                                <div className="w-full h-full relative">
+                                    <Image alt="" src={picture} fill />
+                                </div>
+                            </SwiperSlide>
+                        );
+                    })}
             </Swiper>
             <Swiper
                 onSwiper={setThumbsSwiper as any}
@@ -58,21 +54,17 @@ const ProductCarousel = () => {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper"
             >
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="w-full h-full relative">
-                        <Image alt="" src="https://source.unsplash.com/random/1200×500" fill />
-                    </div>
-                </SwiperSlide>
+                {data.images &&
+                    data.images.length > 0 &&
+                    data.images.map((picture, index) => {
+                        return (
+                            <SwiperSlide key={index}>
+                                <div className="w-full h-full relative">
+                                    <Image alt="" src={picture} fill />
+                                </div>
+                            </SwiperSlide>
+                        );
+                    })}
             </Swiper>
         </>
     );
