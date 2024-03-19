@@ -1,14 +1,57 @@
 'use client';
 import { Button, Divider, Input, Radio, RadioGroup, useDisclosure } from '@nextui-org/react';
-import React from 'react';
+import React, { useState } from 'react';
 import CheckoutItem from './_components/CheckoutItem';
 import MainLogo from '@/assets/icons/MainLogo';
 import { HiCheck } from 'react-icons/hi';
 import ModalAddress from './_components/ModalAddress';
 import { cn } from '@/libs/utils';
+import useGetUser from '@/hooks/libs/useGetUser';
+import { useSession } from 'next-auth/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useAuthAxios from '@/hooks/useAuthAxios';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const PaymentPage = () => {
+    const authAxios = useAuthAxios();
+    const { data: session } = useSession();
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { replace } = useRouter();
+    const [address, setAddress] = useState({
+        address: '180 Cao Lỗ',
+        district: { code: 1450, name: 'Quận 8' },
+        province: { code: 202, name: 'Hồ Chí Minh' },
+        ward: { code: '20804', name: 'Phường 4' },
+    });
+    const [ship, setShip] = useState(50000);
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: (data: any) => authAxios.post('/bill', { ...data }),
+        onSuccess: () => {
+            toast.success('Đặt Hàng Thành Công');
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            replace('/');
+        },
+    });
+
+    const { data } = useGetUser(session?.user.id as string);
+    const carts: any[] = data?.data.data.user.cart;
+
+    const handleSubmit = (data: React.SetStateAction<null | any>) => {
+        setAddress(data);
+    };
+
+    const handleBuy = () => {
+        const obj = {
+            products: carts,
+            total: carts?.reduce((total, item) => total + item.price * item.quantity, ship),
+            uid: session?.user.id,
+            address,
+            payment: 'OFFLINE',
+        };
+        mutate(obj as any);
+    };
     return (
         <div className="wrapper my-10">
             <div className="grid grid-cols-[1fr_300px] gap-4">
@@ -30,8 +73,8 @@ const PaymentPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {new Array(5).fill(null).map((cart, index) => {
-                                    return <CheckoutItem key={index} />;
+                                {carts?.map((cart, index) => {
+                                    return <CheckoutItem key={index} data={cart} index={index + 1} />;
                                 })}
                             </tbody>
                         </table>
@@ -63,7 +106,7 @@ const PaymentPage = () => {
                             <span className="text-sm font-medium">0387737544</span>
                         </div>
                         <p className="text-sm mt-3">
-                            Trường Đại Học Công Nghệ Sài Gòn, 180 Cao Lỗ, Phường 4, Quận 8, TP.HCM
+                            {`${address.address}, ${address.ward.name}, ${address.district.name}, ${address.province.name}`}
                         </p>
                     </div>
                     <div className="p-3 bg-white mb-4 rounded-md">
@@ -82,27 +125,27 @@ const PaymentPage = () => {
                         <Divider className="my-3" />
                         <div className="flex justify-between items-center">
                             <span>Tạm tính: </span>
-                            <span>550.000 đ</span>
+                            <span>{carts?.reduce((total, item) => total + item.price * item.quantity, 0)} đ</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span>Phí vận chuyển: </span>
-                            <span>50.000 đ</span>
+                            <span>{ship} đ</span>
                         </div>
                         <Divider className="my-3" />
                         <div className="flex justify-between items-center">
                             <span>Tổng: </span>
-                            <span>600.000 đ</span>
+                            <span>{carts?.reduce((total, item) => total + item.price * item.quantity, ship)} đ</span>
                         </div>
                         <p className="text-end my-4 text-xs opacity-45">
                             (Giá này đã bao gồm thuế GTGT, phí đóng gói, phí vận chuyển và các chi phí phát sinh khác)
                         </p>
-                        <Button fullWidth color="danger">
+                        <Button fullWidth color="danger" onClick={handleBuy}>
                             Đặt Hàng
                         </Button>
                     </div>
                 </aside>
             </div>
-            <ModalAddress isOpen={isOpen} onOpenChange={onOpenChange} />
+            <ModalAddress isOpen={isOpen} onOpenChange={onOpenChange} handleSubmit={handleSubmit} />
         </div>
     );
 };

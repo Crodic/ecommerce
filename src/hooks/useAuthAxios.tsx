@@ -7,7 +7,7 @@ import { authAxios } from '@/services/axios';
 
 const useAuthAxios = () => {
     const { data: session } = useSession();
-    const refreshToken = useRefreshToken();
+    // const refreshToken = useRefreshToken();
 
     useEffect(() => {
         const requestInterceptor = authAxios.interceptors.request.use(
@@ -20,25 +20,25 @@ const useAuthAxios = () => {
             (error) => Promise.reject(error)
         );
 
-        const responseInterceptor = authAxios.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-                const originalRequest = error.config;
-                if (error.response.status === 403 && !originalRequest?.sent) {
-                    originalRequest.sent = true;
-                    await refreshToken();
-                    originalRequest.headers.Authorization = `Bearer ${session?.accessToken}`;
-                    return authAxios(originalRequest);
-                }
-                return Promise.reject(error);
-            }
-        );
+        // const responseInterceptor = authAxios.interceptors.response.use(
+        //     (response) => response,
+        //     async (error) => {
+        //         const originalRequest = error.config;
+        //         if (error.response.status === 403 && !originalRequest?.sent) {
+        //             originalRequest.sent = true;
+        //             await refreshToken();
+        //             originalRequest.headers.Authorization = `Bearer ${session?.accessToken}`;
+        //             return authAxios(originalRequest);
+        //         }
+        //         return Promise.reject(error);
+        //     }
+        // );
 
         return () => {
             authAxios.interceptors.request.eject(requestInterceptor);
-            authAxios.interceptors.response.eject(responseInterceptor);
+            // authAxios.interceptors.response.eject(responseInterceptor);
         };
-    }, [session, refreshToken]);
+    }, [session]);
 
     return authAxios;
 };
