@@ -32,6 +32,7 @@ const PaymentPage = () => {
         onSuccess: () => {
             toast.success('Đặt Hàng Thành Công');
             queryClient.invalidateQueries({ queryKey: ['bill'] });
+            queryClient.invalidateQueries({ queryKey: ['user'] });
             replace('/bills');
         },
     });
