@@ -3,7 +3,7 @@ import { Button, Divider, Input, Radio, RadioGroup, useDisclosure } from '@nextu
 import React, { useState } from 'react';
 import CheckoutItem from './_components/CheckoutItem';
 import MainLogo from '@/assets/icons/MainLogo';
-import { HiCheck } from 'react-icons/hi';
+import { HiCheck, HiSave } from 'react-icons/hi';
 import ModalAddress from './_components/ModalAddress';
 import { cn } from '@/libs/utils';
 import useGetUser from '@/hooks/libs/useGetUser';
@@ -25,13 +25,14 @@ const PaymentPage = () => {
         ward: { code: '20804', name: 'Phường 4' },
     });
     const [ship, setShip] = useState(50000);
+    const [phone, setPhone] = useState('');
     const queryClient = useQueryClient();
     const { mutate } = useMutation({
         mutationFn: (data: any) => authAxios.post('/bill', { ...data }),
         onSuccess: () => {
             toast.success('Đặt Hàng Thành Công');
             queryClient.invalidateQueries({ queryKey: ['user'] });
-            replace('/');
+            replace('/bills');
         },
     });
 
@@ -49,6 +50,7 @@ const PaymentPage = () => {
             uid: session?.user.id,
             address,
             payment: 'OFFLINE',
+            phone: phone,
         };
         mutate(obj as any);
     };
@@ -101,13 +103,25 @@ const PaymentPage = () => {
                         </div>
                         <Divider className="my-3" />
                         <div className="flex justify-start items-center gap-3 h-5">
-                            <span className="text-sm font-medium">Crodic Crystal</span>
+                            <span className="text-sm font-medium">{session?.user.name || 'Người dùng'}</span>
                             <Divider orientation="vertical" />
-                            <span className="text-sm font-medium">0387737544</span>
+                            <span className="text-sm font-medium">{phone}</span>
                         </div>
                         <p className="text-sm mt-3">
                             {`${address.address}, ${address.ward.name}, ${address.district.name}, ${address.province.name}`}
                         </p>
+                    </div>
+                    <div className="p-3 bg-white mb-4 rounded-md">
+                        <h4 className="text-lg font-medium">Số điện thoại nhận hàng</h4>
+                        <Divider className="my-3" />
+                        <div className="flex gap-3 items-center">
+                            <Input
+                                size="sm"
+                                placeholder="Nhập số điện thoại..."
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </div>
                     </div>
                     <div className="p-3 bg-white mb-4 rounded-md">
                         <h4 className="text-lg font-medium">Mã Giảm Giá</h4>
@@ -139,7 +153,7 @@ const PaymentPage = () => {
                         <p className="text-end my-4 text-xs opacity-45">
                             (Giá này đã bao gồm thuế GTGT, phí đóng gói, phí vận chuyển và các chi phí phát sinh khác)
                         </p>
-                        <Button fullWidth color="danger" onClick={handleBuy}>
+                        <Button fullWidth color="danger" onClick={handleBuy} isDisabled={!phone}>
                             Đặt Hàng
                         </Button>
                     </div>
