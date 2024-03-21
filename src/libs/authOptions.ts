@@ -16,7 +16,7 @@ export const authOptions: AuthOptions = {
                 }
                 const email = credentials.email;
                 const password = credentials.password;
-                const res = await fetch(`http://localhost:1919/api/v1/auth/login`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export const authOptions: AuthOptions = {
             profile: async (profile: GoogleProfile, token) => {
                 if (profile) {
                     try {
-                        const res = await fetch(`http://localhost:1919/api/v1/auth/login`, {
+                        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -104,7 +104,6 @@ export const authOptions: AuthOptions = {
             }
             if (account?.provider === 'google') {
                 if (user) {
-                    console.log(user);
                     token.accessToken = (user as any).accessToken;
                     token.refreshToken = (user as any).refreshToken;
                     token.id = (user as any).id;

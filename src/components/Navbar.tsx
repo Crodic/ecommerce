@@ -22,6 +22,7 @@ import { Bungee } from 'next/font/google';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+import { CiSettings } from 'react-icons/ci';
 import { HiSearch, HiShoppingCart, HiUser, HiUserCircle } from 'react-icons/hi';
 
 const bungee = Bungee({
@@ -34,7 +35,6 @@ export default function Navbar() {
     const { push } = useRouter();
     const { data: session, status } = useSession();
     const { data: user } = useGetUser(session?.user.id as string);
-    console.log(session);
 
     const render = useCallback(() => {
         if (status === 'unauthenticated') {
@@ -68,7 +68,9 @@ export default function Navbar() {
                     </DropdownTrigger>
                     <DropdownMenu aria-label="list">
                         <DropdownItem key="account">Thông tin tài khoản</DropdownItem>
-                        <DropdownItem key="bill">Đơn hàng của tôi</DropdownItem>
+                        <DropdownItem key="bill" onClick={() => push('/bills')}>
+                            Đơn hàng của tôi
+                        </DropdownItem>
                         <DropdownItem
                             key="delete"
                             className="text-danger"
@@ -138,6 +140,11 @@ export default function Navbar() {
                             <HiShoppingCart size={20} />
                         </Badge>
                     </Button>
+                    {session?.user.role === 'ADMIN' && (
+                        <Button variant="light" size="sm" isIconOnly onClick={() => push('/dashboard')}>
+                            <CiSettings size={20} />
+                        </Button>
+                    )}
                 </div>
             </div>
         </nav>

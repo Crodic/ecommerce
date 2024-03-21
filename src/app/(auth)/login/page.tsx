@@ -1,12 +1,13 @@
 'use client';
 import React, { useState } from 'react';
-import { Tabs, Tab, Input, Link, Button, Card, CardBody, CardHeader, Divider } from '@nextui-org/react';
+import { Tabs, Tab, Input, Link, Button, Card, CardBody, Divider } from '@nextui-org/react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { BsGoogle } from 'react-icons/bs';
 import MainLogo from '@/assets/icons/MainLogo';
 import { useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '@/services/axios';
+import { toast } from 'react-toastify';
 
 interface IFormData {
     email: string;
@@ -33,7 +34,7 @@ export default function LoginPage() {
         mutationFn: (data: IRegister) => axiosInstance.post('/auth/register', { ...data }),
     });
 
-    const { replace } = useRouter();
+    const { replace, push } = useRouter();
 
     const handleLogin = async () => {
         try {
@@ -58,8 +59,10 @@ export default function LoginPage() {
         try {
             setLoading(true);
             mutate(formDataRegister);
+            toast.success('Đăng ký thành công.');
+            push('/');
         } catch (error) {
-            console.log(error);
+            toast.error('Đăng ký thất bại. Vui Lòng thử lại sau.');
         } finally {
             setLoading(false);
         }
