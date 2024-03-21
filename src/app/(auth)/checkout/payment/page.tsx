@@ -3,7 +3,7 @@ import { Button, Divider, Input, Radio, RadioGroup, useDisclosure } from '@nextu
 import React, { useState } from 'react';
 import CheckoutItem from './_components/CheckoutItem';
 import MainLogo from '@/assets/icons/MainLogo';
-import { HiCheck, HiSave } from 'react-icons/hi';
+import { HiCheck } from 'react-icons/hi';
 import ModalAddress from './_components/ModalAddress';
 import { cn } from '@/libs/utils';
 import useGetUser from '@/hooks/libs/useGetUser';
