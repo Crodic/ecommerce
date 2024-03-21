@@ -31,7 +31,7 @@ const PaymentPage = () => {
         mutationFn: (data: any) => authAxios.post('/bill', { ...data }),
         onSuccess: () => {
             toast.success('Đặt Hàng Thành Công');
-            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['bill'] });
             replace('/bills');
         },
     });
