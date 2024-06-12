@@ -21,8 +21,7 @@ const TextFiledStyled = styled(TextField)<TextFieldProps>(({ theme }) => {
             },
             '&:placeholder': {},
             '.MuiInputBase-input': {
-                padding: '8px 10px',
-                color: 'red'
+                padding: '8px 10px'
             },
             '&.Mui-error': {
                 borderColor: theme.palette.error.main
