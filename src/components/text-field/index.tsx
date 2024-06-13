@@ -33,8 +33,13 @@ const TextFiledStyled = styled(TextField)<TextFieldProps>(({ theme }) => {
                 }
             }
         },
-        'MuiFormHelperText-root.Mui-error': {
-            marginTop: '4px'
+        'MuiFormHelperText-root': {
+            margin: theme.spacing(1, 0, 0),
+            lineHeight: 1.154,
+            color: theme.palette.text.secondary,
+            '&.Mui-error': {
+                color: theme.palette.error.main
+            }
         }
     }
 })
