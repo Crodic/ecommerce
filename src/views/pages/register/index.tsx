@@ -1,8 +1,7 @@
 'use client'
 import { Box, Button, IconButton, InputAdornment, Link, useTheme } from '@mui/material'
 import { Typography } from '@mui/material'
-import { Checkbox } from '@mui/material'
-import { FormControlLabel } from '@mui/material'
+import NextLink from 'next/link'
 import { NextPage } from 'next'
 import CustomTextField from 'src/components/text-field'
 import { Controller, useForm } from 'react-hook-form'
@@ -12,28 +11,29 @@ import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
 import { useState } from 'react'
 import IconifyIcon from 'src/components/Icon'
 import Image from 'next/image'
-import NextLink from 'next/link'
 
-import LoginImageLight from '/public/images/login-light.png'
-import LoginImageDark from '/public/images/login-dark.png'
-
-import GoogleSvg from '/public/svgs/facebook.svg'
-import FacebookSvg from '/public/svgs/google.svg'
+import RegisterLight from '/public/images/register-light.png'
+import RegisterDark from '/public/images/register-dark.png'
 
 import CssBaseline from '@mui/material/CssBaseline'
 
 interface IProps {}
 
-const LoginPage: NextPage<IProps> = () => {
+const Register: NextPage<IProps> = () => {
     const [showPassword, setShowPassword] = useState(false)
-    const [rememberMe, setRememberMe] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const theme = useTheme()
     const schema = yup.object().shape({
         email: yup.string().required('The Field is Required').matches(EMAIL_REG, 'The field is not email type'),
         password: yup
             .string()
             .required('The Field is Required')
+            .matches(PASSWORD_REG, 'The password is contain character, special character and symbol'),
+        confirmPassword: yup
+            .string()
+            .required('The Field is Required')
             .matches(PASSWORD_REG, 'The password is contain character, special character and symbol')
+            .oneOf([yup.ref('password'), ''], 'Confirm Password is matched with Password')
     })
     const {
         handleSubmit,
@@ -42,7 +42,8 @@ const LoginPage: NextPage<IProps> = () => {
     } = useForm({
         defaultValues: {
             email: '',
-            password: ''
+            password: '',
+            confirmPassword: ''
         },
         mode: 'onBlur',
         resolver: yupResolver(schema)
@@ -76,7 +77,7 @@ const LoginPage: NextPage<IProps> = () => {
                 }}
             >
                 <Image
-                    src={theme.palette.mode == 'light' ? LoginImageLight : LoginImageDark}
+                    src={theme.palette.mode == 'light' ? RegisterLight : RegisterDark}
                     alt='Login Image'
                     style={{ height: 'auto', width: 'auto' }}
                     width={300}
@@ -90,11 +91,12 @@ const LoginPage: NextPage<IProps> = () => {
                         marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        width: { sm: '100%', md: '300px' }
                     }}
                 >
                     <Typography component='h1' variant='h3'>
-                        Sign in
+                        Sign up
                     </Typography>
                     <Box
                         component='form'
@@ -158,50 +160,70 @@ const LoginPage: NextPage<IProps> = () => {
                                 />
                             )}
                         />
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        value='remember'
-                                        color='primary'
-                                        checked={rememberMe}
-                                        onChange={e => setRememberMe(e.target.checked)}
-                                    />
-                                }
-                                label='Remember me'
-                            />
-                            <Link component={NextLink} href='#' variant='body2'>
-                                Forgot password?
-                            </Link>
-                        </Box>
-                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                            Sign In
+                        <Controller
+                            control={control}
+                            rules={{ required: true }}
+                            name='confirmPassword'
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <CustomTextField
+                                    margin='normal'
+                                    required
+                                    fullWidth
+                                    label='Confirm Password'
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    autoComplete='current-password'
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    error={Boolean(errors?.password)}
+                                    placeholder='Enter your password'
+                                    helperText={errors.password?.message}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    sx={{
+                                                        color:
+                                                            theme.palette.mode === 'light'
+                                                                ? theme.palette.customColors.light
+                                                                : theme.palette.customColors.dark
+                                                    }}
+                                                    edge='end'
+                                                    onClick={() => setShowConfirmPassword(prev => !prev)}
+                                                >
+                                                    {showConfirmPassword ? (
+                                                        <IconifyIcon icon='material-symbols:visibility-outline' />
+                                                    ) : (
+                                                        <IconifyIcon icon='ic:outline-visibility-off' />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            )}
+                        />
+                        <Button
+                            type='submit'
+                            fullWidth
+                            variant='contained'
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                color:
+                                    theme.palette.mode === 'light'
+                                        ? theme.palette.customColors.light
+                                        : theme.palette.customColors.dark
+                            }}
+                        >
+                            Sign up
                         </Button>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
-                            <Typography>Don't have an account?</Typography>
+                            <Typography>Already an account?</Typography>
 
-                            <Link
-                                sx={{
-                                    color:
-                                        theme.palette.mode === 'light'
-                                            ? theme.palette.customColors.light
-                                            : theme.palette.customColors.dark
-                                }}
-                                component={NextLink}
-                                href='/register'
-                                variant='body2'
-                            >
-                                Sign up
+                            <Link component={NextLink} href='/login' variant='body2'>
+                                Sign in
                             </Link>
-                        </Box>
-                        <Typography sx={{ textAlign: 'center', my: 2 }}>Or</Typography>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
-                            <IconButton>
-                                <Image src={FacebookSvg} alt='Facebook Login' height={40} width={40} />
-                            </IconButton>
-                            <IconButton>
-                                <Image src={GoogleSvg} alt='Google Login' height={40} width={40} />
-                            </IconButton>
                         </Box>
                     </Box>
                 </Box>
@@ -210,4 +232,4 @@ const LoginPage: NextPage<IProps> = () => {
     )
 }
 
-export default LoginPage
+export default Register
