@@ -180,7 +180,17 @@ const LoginPage: NextPage<IProps> = () => {
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
                             <Typography>Don't have an account?</Typography>
 
-                            <Link component={NextLink} href='/register' variant='body2'>
+                            <Link
+                                sx={{
+                                    color:
+                                        theme.palette.mode === 'light'
+                                            ? theme.palette.customColors.light
+                                            : theme.palette.customColors.dark
+                                }}
+                                component={NextLink}
+                                href='/register'
+                                variant='body2'
+                            >
                                 Sign up
                             </Link>
                         </Box>

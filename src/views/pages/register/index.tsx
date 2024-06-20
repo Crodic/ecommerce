@@ -182,6 +182,12 @@ const Register: NextPage<IProps> = () => {
                                         endAdornment: (
                                             <InputAdornment position='end'>
                                                 <IconButton
+                                                    sx={{
+                                                        color:
+                                                            theme.palette.mode === 'light'
+                                                                ? theme.palette.customColors.light
+                                                                : theme.palette.customColors.dark
+                                                    }}
                                                     edge='end'
                                                     onClick={() => setShowConfirmPassword(prev => !prev)}
                                                 >
@@ -197,7 +203,19 @@ const Register: NextPage<IProps> = () => {
                                 />
                             )}
                         />
-                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                        <Button
+                            type='submit'
+                            fullWidth
+                            variant='contained'
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                color:
+                                    theme.palette.mode === 'light'
+                                        ? theme.palette.customColors.light
+                                        : theme.palette.customColors.dark
+                            }}
+                        >
                             Sign up
                         </Button>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
